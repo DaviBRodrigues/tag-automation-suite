@@ -14,16 +14,218 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analyses: {
+        Row: {
+          client_id: string | null
+          created_at: string
+          created_by: string | null
+          error_message: string | null
+          id: string
+          measurement_plan: Json | null
+          page_title: string | null
+          raw_metadata: Json | null
+          status: Database["public"]["Enums"]["analysis_status"]
+          summary: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          client_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          id?: string
+          measurement_plan?: Json | null
+          page_title?: string | null
+          raw_metadata?: Json | null
+          status?: Database["public"]["Enums"]["analysis_status"]
+          summary?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          client_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          id?: string
+          measurement_plan?: Json | null
+          page_title?: string | null
+          raw_metadata?: Json | null
+          status?: Database["public"]["Enums"]["analysis_status"]
+          summary?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analyses_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clients: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+          notes: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      conversion_points: {
+        Row: {
+          analysis_id: string
+          created_at: string
+          css_selector: string | null
+          description: string | null
+          element_html: string | null
+          id: string
+          label: string
+          priority: Database["public"]["Enums"]["priority_level"]
+          suggested_event_name: string | null
+          suggested_tag_name: string | null
+          trigger_conditions: Json | null
+          trigger_type: string | null
+          type: Database["public"]["Enums"]["conversion_type"]
+        }
+        Insert: {
+          analysis_id: string
+          created_at?: string
+          css_selector?: string | null
+          description?: string | null
+          element_html?: string | null
+          id?: string
+          label: string
+          priority?: Database["public"]["Enums"]["priority_level"]
+          suggested_event_name?: string | null
+          suggested_tag_name?: string | null
+          trigger_conditions?: Json | null
+          trigger_type?: string | null
+          type: Database["public"]["Enums"]["conversion_type"]
+        }
+        Update: {
+          analysis_id?: string
+          created_at?: string
+          css_selector?: string | null
+          description?: string | null
+          element_html?: string | null
+          id?: string
+          label?: string
+          priority?: Database["public"]["Enums"]["priority_level"]
+          suggested_event_name?: string | null
+          suggested_tag_name?: string | null
+          trigger_conditions?: Json | null
+          trigger_type?: string | null
+          type?: Database["public"]["Enums"]["conversion_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversion_points_analysis_id_fkey"
+            columns: ["analysis_id"]
+            isOneToOne: false
+            referencedRelation: "analyses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      analysis_status: "pending" | "running" | "completed" | "failed"
+      app_role: "admin" | "member"
+      conversion_type:
+        | "form"
+        | "whatsapp"
+        | "cta_button"
+        | "thank_you_page"
+        | "phone"
+        | "email"
+        | "other"
+      priority_level: "low" | "medium" | "high"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +352,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      analysis_status: ["pending", "running", "completed", "failed"],
+      app_role: ["admin", "member"],
+      conversion_type: [
+        "form",
+        "whatsapp",
+        "cta_button",
+        "thank_you_page",
+        "phone",
+        "email",
+        "other",
+      ],
+      priority_level: ["low", "medium", "high"],
+    },
   },
 } as const
