@@ -20,8 +20,6 @@ type ConvPoint = {
   element_html: string | null;
   trigger_type: string | null;
   trigger_conditions: Record<string, unknown> | null;
-  suggested_tag_name: string | null;
-  suggested_event_name: string | null;
   priority: "low" | "medium" | "high";
 };
 
@@ -249,11 +247,11 @@ const PointCard = ({ p }: { p: ConvPoint }) => {
   const Icon = typeIcon[p.type];
   const copyConfig = () => {
     const cfg = {
-      tag_name: p.suggested_tag_name,
-      event_name: p.suggested_event_name,
       trigger_type: p.trigger_type,
       trigger_conditions: p.trigger_conditions,
       css_selector: p.css_selector,
+      element_type: p.type,
+      label: p.label,
     };
     navigator.clipboard.writeText(JSON.stringify(cfg, null, 2));
     toast.success("config copiada");
@@ -278,9 +276,9 @@ const PointCard = ({ p }: { p: ConvPoint }) => {
 
           <div className="grid md:grid-cols-2 gap-2 text-xs">
             <Field label="trigger" value={p.trigger_type ?? "—"} />
-            <Field label="event" value={p.suggested_event_name ?? "—"} />
-            <Field label="tag" value={p.suggested_tag_name ?? "—"} />
+            <Field label="tipo" value={typeLabel[p.type]} />
             <Field label="seletor" value={p.css_selector ?? "—"} mono />
+            <Field label="prioridade" value={p.priority} />
           </div>
 
           {p.trigger_conditions && Object.keys(p.trigger_conditions).length > 0 && (
